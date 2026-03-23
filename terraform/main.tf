@@ -21,34 +21,34 @@ provider "aws" {
   region = var.region
 }
 
+data "aws_eks_cluster" "cluster" {
+  name = module.eks.cluster_name
+}
+
 data "aws_eks_cluster_auth" "cluster" {
-  name = aws_eks_cluster.main.name
+  name = module.eks.cluster_name
 }
 
 # Kubernetes provider (for Helm charts)
 provider "kubernetes" {
-  host                   = module.eks.cluster_endpoint
-  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
+  host = data.aws_eks_cluster.cluster.endpoint
 
-  exec {
-    api_version = "client.authentication.k8s.io/v1beta1"
-    command     = "aws"
-    args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
-  }
+  cluster_ca_certificate = base64decode(
+    data.aws_eks_cluster.cluster.certificate_authority[0].data
+  )
+
+  token = data.aws_eks_cluster_auth.cluster.token
 }
 
 # Helm provider
 provider "helm" {
   kubernetes {
-    host                   = module.eks.cluster_endpoint
-    cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-    token                  = data.aws_eks_cluster_auth.cluster.token
+    host = data.aws_eks_cluster.cluster.endpoint
 
-    exec {
-      api_version = "client.authentication.k8s.io/v1beta1"
-      command     = "aws"
-      args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
-    }
+    cluster_ca_certificate = base64decode(
+      data.aws_eks_cluster.cluster.certificate_authority[0].data
+    )
+
+    token = data.aws_eks_cluster_auth.cluster.token
   }
 }
