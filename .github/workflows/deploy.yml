@@ -32,9 +32,6 @@ jobs:
         with:
           terraform_version: 1.5.7
 
-      - name: Check Terraform Version
-        run: terraform -v
-
       - name: Clean Terraform cache
         run: |
           rm -rf .terraform
@@ -42,12 +39,6 @@ jobs:
 
       - name: Terraform Init
         run: terraform init -upgrade
-
-      - name: Terraform Init
-        run: terraform init -reconfigure
-
-      - name: Check provider versions
-        run: terraform providers
 
       - name: Terraform Validate
         run: terraform validate
