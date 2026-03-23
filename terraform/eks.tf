@@ -17,6 +17,6 @@ module "eks" {
     }
   }
 
-  # Disable optional GPU/Elastic Inference to avoid dynamic block errors
+  # Disable GPU/Elastic Inference to avoid module errors
   enable_irsa = true
 }
