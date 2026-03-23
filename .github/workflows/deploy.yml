@@ -33,6 +33,7 @@ jobs:
         run: |
           rm -rf .terraform
           rm -f .terraform.lock.hcl
+          terraform init -upgrade
 
       - name: Terraform Init
         run: |
