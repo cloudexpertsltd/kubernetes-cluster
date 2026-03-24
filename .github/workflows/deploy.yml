@@ -1,4 +1,4 @@
-name: Deploy EKS + ArgoCD Infrastructure
+name: Deploy EKS Infrastructure
 
 on:
   push:

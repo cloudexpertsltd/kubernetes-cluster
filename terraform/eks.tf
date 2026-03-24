@@ -26,13 +26,4 @@ module "eks" {
 
   enable_irsa = true
 
-  # Add your IAM user directly here
-  aws_auth_users = [
-    {
-      user_arn = "arn:aws:iam::865809098262:user/akash"
-      username = "akash"
-      groups   = ["system:masters"]
-    }
-  ]
-
 }
