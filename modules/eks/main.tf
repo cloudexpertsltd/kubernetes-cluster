@@ -3,7 +3,7 @@ module "this_eks" {
   version = "20.3.0"
 
   cluster_name       = var.cluster_name
-  kubernetes_version = "1.35"
+  cluster_version = "1.35"
 
   vpc_id            = var.vpc_id
   subnet_ids        = var.subnet_ids
