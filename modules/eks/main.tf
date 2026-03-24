@@ -3,14 +3,15 @@ module "eks" {
   version = "20.3.0"
 
   cluster_name    = var.cluster_name
-  cluster_version = "1.27"
+  cluster_version = "1.35"
 
-  # VPC info
-  vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.public_subnet_ids
+  cluster_iam_role_arn = aws_iam_role.eks_cluster_role.arn
+  node_iam_role_arn    = aws_iam_role.eks_node_role.arn
 
-  # Managed node groups
-  eks_managed_node_groups = {
+  vpc_id             = module.vpc.vpc_id
+  public_subnet_ids  = module.vpc.public_subnet_ids
+
+  managed_node_groups = {
     default = {
       desired_capacity = 2
       min_size         = 1
