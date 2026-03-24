@@ -13,10 +13,6 @@ resource "aws_vpc" "this" {
   
 }
 
-vpc_config = {
-  subnet_ids = module.vpc.public_subnet_ids
-}
-
 # Internet Gateway
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
