@@ -5,13 +5,14 @@ module "eks" {
   cluster_name    = var.cluster_name
   cluster_version = "1.35"
 
-  cluster_iam_role_arn = aws_iam_role.eks_cluster_role.arn
-  node_iam_role_arn    = aws_iam_role.eks_node_role.arn
+  # Let the module create IAM roles automatically
+  create_eks_role  = true
+  create_node_groups_role = true
 
-  vpc_id             = module.vpc.vpc_id
-  public_subnet_ids  = module.vpc.public_subnet_ids
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.public_subnet_ids
 
-  managed_node_groups = {
+  node_groups = {
     default = {
       desired_capacity = 2
       min_size         = 1
