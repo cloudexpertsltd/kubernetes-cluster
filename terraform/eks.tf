@@ -27,13 +27,14 @@ module "eks" {
   enable_irsa = true
 }
 
-# Add users to aws-auth using separate module
+# aws-auth mapping
 module "aws_auth" {
   source = "terraform-aws-modules/eks/aws//modules/aws-auth"
+  version = "20.3.0"
 
-  cluster_name = module.eks.cluster_name
-  cluster_endpoint = module.eks.cluster_endpoint
-  cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
+  cluster_name                       = module.eks.cluster_name
+  cluster_endpoint                   = module.eks.cluster_endpoint
+  cluster_certificate_authority_data  = module.eks.cluster_certificate_authority_data
 
   map_users = [
     {
