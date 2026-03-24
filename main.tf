@@ -1,28 +1,18 @@
 module "vpc" {
-  source = "./modules/vpc"
+  source       = "./modules/vpc"
   cluster_name = var.cluster_name
-  region       = "ap-southeast-1"
+  region       = var.region
 }
 
 module "eks" {
-  source = "./modules/eks"
-  cluster_name    = var.cluster_name
-  cluster_version = var.cluster_version
-  vpc_id          = module.vpc.vpc_id
-  subnet_ids      = module.vpc.public_subnet_ids
-
-  eks_managed_node_groups = {
-    default = {
-      desired_capacity = 2
-      min_size         = 1
-      max_size         = 3
-      instance_types   = ["t3.medium"]
-    }
-  }
+  source       = "./modules/eks"
+  cluster_name = var.cluster_name
+  subnet_ids   = module.vpc.public_subnet_ids
+  vpc_id       = module.vpc.vpc_id
 }
 
 module "iam" {
   source       = "./modules/iam"
-  cluster_name = module.eks.cluster_name
+  cluster_name = var.cluster_name
   cluster_arn  = module.eks.cluster_arn
 }

@@ -15,10 +15,6 @@ variable "subnet_ids" {
   type = list(string)
 }
 
-variable "eks_node_role_arn" {
-  type = string
-}
-
 variable "desired_capacity" {
   type    = number
   default = 2
