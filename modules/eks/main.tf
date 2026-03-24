@@ -3,17 +3,16 @@ module "eks" {
   version = "20.3.0"
 
   cluster_name    = var.cluster_name
-  cluster_version = "1.27"
+  cluster_version = "1.35"
 
   vpc_id = module.vpc.vpc_id
-  # This is the correct argument for public subnets
-  public_subnets = module.vpc.public_subnet_ids
 
-  # Let the module create roles automatically
-  create_eks_role  = true
-  create_node_groups_role = true
+  # Use vpc_config block instead of public_subnets / subnet_ids
+  vpc_config = {
+    subnet_ids = module.vpc.public_subnet_ids
+  }
 
-  # Define a simple managed node group
+  # Define managed node groups
   eks_managed_node_groups = {
     default = {
       desired_capacity = 2

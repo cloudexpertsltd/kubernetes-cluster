@@ -10,6 +10,11 @@ resource "aws_vpc" "this" {
   tags = {
     Name = "${var.cluster_name}-vpc"
   }
+  
+}
+
+vpc_config = {
+  subnet_ids = module.vpc.public_subnet_ids
 }
 
 # Internet Gateway
