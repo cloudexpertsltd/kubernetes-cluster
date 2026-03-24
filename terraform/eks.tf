@@ -26,13 +26,19 @@ module "eks" {
 
   enable_irsa = true
 
-  # NEW way to add GitHub Actions IAM user
+# Add users to aws-auth using separate module
+module "aws_auth" {
+  source = "terraform-aws-modules/eks/aws//modules/aws-auth"
+
+  cluster_name = module.eks.cluster_name
+  cluster_endpoint = module.eks.cluster_endpoint
+  cluster_certificate_authority_data = module.eks.cluster_certificate_authority_data
+
   map_users = [
     {
-      user_arn  = "arn:aws:iam::865809098262:user/akash"
-      username  = "akash"
-      groups    = ["system:masters"]
+      user_arn = "arn:aws:iam::865809098262:user/akash"
+      username = "akash"
+      groups   = ["system:masters"]
     }
   ]
-
 }
