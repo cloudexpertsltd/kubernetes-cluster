@@ -25,4 +25,14 @@ module "eks" {
   }
 
   enable_irsa = true
+
+  manage_aws_auth = true
+  aws_auth_users = [
+    {
+      userarn  = "arn:aws:iam::123456789012:user/akash"
+      username = "akash"
+      groups   = ["system:masters"]
+    }
+  ]
+
 }
