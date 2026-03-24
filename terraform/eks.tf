@@ -1,18 +1,19 @@
+# ---------------------------
+# EKS Module
+# ---------------------------
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "20.3.0"
 
   cluster_name    = var.cluster_name
-  cluster_version = "1.35"
+  cluster_version = "1.25"
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
   cluster_endpoint_private_access       = true
   cluster_endpoint_public_access        = true
-  cluster_endpoint_public_access_cidrs  = ["0.0.0.0/0"]
-
-  enable_irsa = true
+  cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
 
   eks_managed_node_groups = {
     default = {
@@ -23,20 +24,5 @@ module "eks" {
     }
   }
 
-  # ✅ MOVE IT HERE
-  access_entries = {
-    github-actions = {
-      principal_arn = "arn:aws:iam::865809098262:user/akash"
-
-      policy_associations = {
-        admin = {
-          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
-
-          access_scope = {
-            type = "cluster"
-          }
-        }
-      }
-    }
-  }
+  enable_irsa = true
 }
