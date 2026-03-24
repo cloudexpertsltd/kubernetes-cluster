@@ -21,11 +21,3 @@ provider "kubernetes" {
 
   token = data.aws_eks_cluster_auth.cluster.token
 }
-
-output "cluster_name" {
-  value = module.eks.cluster_name
-}
-
-output "cluster_endpoint" {
-  value = module.eks.cluster_endpoint
-}
