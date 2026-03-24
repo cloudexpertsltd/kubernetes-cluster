@@ -1,15 +1,15 @@
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "20.3.0"
+
   cluster_name    = var.cluster_name
   cluster_version = "1.35"
-  manage_aws_auth = true
 
-  aws_auth_users = [
+  map_users = [
     {
-      userarn  = "arn:aws:iam::865809098262:user/akash"
-      username = "github-actions"
-      groups   = ["system:masters"]
+      user_arn  = "arn:aws:iam::865809098262:user/akash"
+      username  = "github-actions"
+      groups    = ["system:masters"]
     }
   ]
 
@@ -18,7 +18,7 @@ module "eks" {
   cluster_endpoint_private_access       = true
   cluster_endpoint_public_access        = true
   cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
-  
+
   eks_managed_node_groups = {
     default = {
       desired_size   = 2
