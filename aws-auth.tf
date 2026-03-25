@@ -20,13 +20,15 @@ resource "kubernetes_config_map" "aws_auth" {
 
   data = {
     mapRoles = yamlencode([
+      # GitHub Actions runner
       {
         rolearn  = "arn:aws:iam::865809098262:role/GitHubRunnerRole"
         username = "github"
         groups   = ["system:masters"]
       },
+      # Node group role
       {
-        rolearn  = module.eks.node_groups["default"].iam_role_arn
+        rolearn  = module.eks.managed_node_group_iam_role_arns["default"]
         username = "system:node:{{EC2PrivateDNSName}}"
         groups   = ["system:bootstrappers","system:nodes"]
       }
