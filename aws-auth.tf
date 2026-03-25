@@ -28,7 +28,7 @@ resource "kubernetes_config_map" "aws_auth" {
       },
       # Node group role
       {
-        rolearn  = module.eks.managed_node_group_iam_role_arns["default"]
+        rolearn  = module.eks.managed_node_groups["default"].iam_role_arn
         username = "system:node:{{EC2PrivateDNSName}}"
         groups   = ["system:bootstrappers","system:nodes"]
       }
