@@ -11,15 +11,14 @@ module "this_eks" {
   cluster_endpoint_public_access  = var.cluster_endpoint_public_access
   cluster_endpoint_private_access = var.cluster_endpoint_private_access
 
-
   eks_managed_node_groups = {
-  default = {
-    desired_size   = 1
-    min_size       = 1
-    max_size       = 1
-    instance_types = ["t3.medium"]
+    default = {
+      desired_size    = 1
+      min_size        = 1
+      max_size        = 1
+      instance_types  = ["t3.medium"]
+    }
   }
-}
 
   enable_irsa = true
 
