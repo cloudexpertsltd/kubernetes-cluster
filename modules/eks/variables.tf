@@ -34,3 +34,13 @@ variable "instance_type" {
   type    = string
   default = "t3.medium"
 }
+
+variable "cluster_endpoint_public_access" {
+  type    = bool
+  default = true
+}
+
+variable "cluster_endpoint_private_access" {
+  type    = bool
+  default = true
+}
