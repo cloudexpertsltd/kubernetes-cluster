@@ -32,7 +32,13 @@ resource "kubernetes_config_map" "aws_auth" {
     mapRoles = yamlencode([
       # GitHub Actions runner role
       {
-        rolearn  = "arn:aws:iam::865809098262:role/GitHubRunnerRole"  # <-- your runner role ARN
+        rolearn  = "arn:aws:iam::865809098262:role/default-eks-node-group-20260324201906423700000001"
+        username = "admin"
+        groups   = ["system:masters"]
+      },
+      # Add GitHubRunnerRole
+      {
+        rolearn  = "arn:aws:iam::<ACCOUNT_ID>:role/GitHubRunnerRole"
         username = "github"
         groups   = ["system:masters"]
       },

@@ -6,7 +6,6 @@ resource "helm_release" "argocd" {
   create_namespace = true
 
   depends_on = [
-    module.eks,
     kubernetes_config_map.aws_auth
   ]
 }
