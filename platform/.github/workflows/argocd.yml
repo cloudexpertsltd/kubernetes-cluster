@@ -1,10 +1,10 @@
-name: Destroy Infrastructure
+name: Install ArgoCD
 
 on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to destroy'
+        description: 'Environment to deploy'
         required: true
         type: choice
         options:
@@ -12,12 +12,16 @@ on:
           - stage
           - prod
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
-  destroy:
+  deploy-argocd:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: infra/envs/${{ github.event.inputs.environment }}
+        working-directory: platform/envs/${{ github.event.inputs.environment }}
 
     steps:
       - uses: actions/checkout@v4
@@ -32,4 +36,4 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - run: terraform init
-      - run: terraform destroy -auto-approve
+      - run: terraform apply -auto-approve
