@@ -16,16 +16,16 @@ permissions:
   id-token: write     # REQUIRED for OIDC
   contents: read
 
-
 jobs:
-  destroy:
+  terraform-destroy:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: infra/envs/${{ github.event.inputs.environment }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
@@ -35,6 +35,19 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.7
 
-      - run: terraform init
-      - run: terraform destroy -auto-approve
+      - name: Terraform Init
+        run: |
+          terraform init -upgrade -reconfigure \
+            -backend-config="key=eks/${{ github.event.inputs.environment }}/terraform.tfstate" \
+            -backend-config="bucket=cloudex-terraform-state-bucket" \
+            -backend-config="region=ap-southeast-1" \
+            -backend-config="dynamodb_table=terraform-lock"
+
+      - name: Terraform Plan Destroy
+        run: terraform plan -destroy -var="cluster_name=my-eks-cluster"
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve -var="cluster_name=my-eks-cluster"
