@@ -42,7 +42,7 @@ jobs:
         run: |
           terraform init -upgrade -reconfigure \
             -backend-config="key=eks/${{ github.event.inputs.environment }}/terraform.tfstate" \
-            -backend-config="bucket=my-terraform-state" \
+            -backend-config="bucket=cloudex-terraform-state-bucket" \
             -backend-config="region=ap-southeast-1" \
             -backend-config="dynamodb_table=terraform-locks"
       
