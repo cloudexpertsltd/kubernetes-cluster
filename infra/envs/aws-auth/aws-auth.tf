@@ -9,13 +9,12 @@ data "terraform_remote_state" "eks" {
 }
 
 data "aws_eks_cluster" "this" {
-  name = data.terraform_remote_state.eks.outputs.eks_cluster_name
+  name = data.terraform_remote_state.eks.outputs.cluster_name
 }
 
 data "aws_eks_cluster_auth" "this" {
-  name = data.terraform_remote_state.eks.outputs.eks_cluster_name
+  name = data.terraform_remote_state.eks.outputs.cluster_name
 }
-
 
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.this.endpoint
