@@ -1,12 +1,11 @@
-# Kubernetes provider using existing kubeconfig
+# Kubernetes provider using kubeconfig generated in runner
 provider "kubernetes" {
-  config_path = "/tmp/kubeconfig"
+  config_path = "~/.kube/config"
 }
 
-# Helm provider will automatically use the Kubernetes provider
+# Helm provider uses the Kubernetes provider automatically
 provider "helm" {}
 
-# Helm release for ArgoCD
 resource "helm_release" "argocd" {
   name             = "argocd"
   namespace        = "argocd"
