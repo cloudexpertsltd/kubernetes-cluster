@@ -30,7 +30,7 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.eks.token
 }
 
-# Helm provider using the aliased Kubernetes provider
+# Helm provider using aliased Kubernetes
 provider "helm" {
   kubernetes = kubernetes.eks
 }
