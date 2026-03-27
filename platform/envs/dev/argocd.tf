@@ -14,12 +14,12 @@ provider "aws" {
 }
 
 # Get cluster name from remote state
-data "aws_eks_cluster" "eks" {
-  name = "my-eks-cluster"
+data "aws_eks_cluster" "this" {
+  name = data.terraform_remote_state.eks.outputs.cluster_name
 }
 
-data "aws_eks_cluster_auth" "eks" {
-  name = data.aws_eks_cluster.eks.name
+data "aws_eks_cluster_auth" "this" {
+  name = data.terraform_remote_state.eks.outputs.cluster_name
 }
 
 # Kubernetes provider (used by Helm)
