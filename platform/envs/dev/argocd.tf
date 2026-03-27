@@ -13,12 +13,19 @@ provider "aws" {
 }
 
 # EKS cluster data
+locals {
+  cluster_name = try(
+    data.terraform_remote_state.eks.outputs.cluster_name,
+    data.terraform_remote_state.eks.outputs.eks_cluster_name
+  )
+}
+
 data "aws_eks_cluster" "eks" {
-  name = data.terraform_remote_state.eks.outputs.cluster_name
+  name = local.cluster_name
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = data.aws_eks_cluster.eks.name
+  name = local.cluster_name
 }
 
 # Kubernetes provider
