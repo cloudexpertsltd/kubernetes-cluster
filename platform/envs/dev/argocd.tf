@@ -5,12 +5,26 @@ data "terraform_remote_state" "eks" {
     bucket = "cloudex-terraform-state-bucket"
     key    = "eks/dev/terraform.tfstate"  # must match your EKS statefile
     region = "ap-southeast-1"
-    workspace = "dev"
   }
 }
 
 provider "aws" {
   region = "ap-southeast-1"
+}
+
+# Get cluster name from remote state
+locals {
+  cluster_name = data.terraform_remote_state.eks.outputs.cluster_name
+}
+
+# EKS cluster info
+data "aws_eks_cluster" "eks" {
+  name = local.cluster_name
+}
+
+# Auth token
+data "aws_eks_cluster_auth" "eks" {
+  name = local.cluster_name
 }
 
 # Kubernetes provider
