@@ -22,7 +22,7 @@ data "aws_eks_cluster_auth" "eks" {
   name = data.aws_eks_cluster.eks.name
 }
 
-# Kubernetes provider (used by Helm)
+# Default Helm provider (for general use)
 provider "helm" {
   kubernetes {
     host                   = data.aws_eks_cluster.eks.endpoint
@@ -31,15 +31,22 @@ provider "helm" {
   }
 }
 
-# Helm provider uses Kubernetes provider
+# Alternative Helm provider (for ArgoCD, for example)
 provider "helm" {
-  kubernetes = kubernetes
+  alias = "argocd"
+  kubernetes {
+    host                   = data.aws_eks_cluster.eks.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.eks.token
+  }
 }
 
 resource "helm_release" "argocd" {
-  name             = "argocd"
-  namespace        = "argocd"
-  repository       = "https://argoproj.github.io/argo-helm"
-  chart            = "argo-cd"
-  create_namespace = true
+  name       = "argocd"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argo-cd"
+  namespace  = "argocd"
+
+  # Use the aliased provider
+  provider = helm.argocd
 }
