@@ -3,11 +3,11 @@ provider "aws" {
   region = "ap-southeast-1"
 }
 
-data "aws_eks_cluster" "this" {
+data "aws_eks_cluster" "eks" {
   name = "dev-eks-cluster"
 }
 
-data "aws_eks_cluster_auth" "this" {
+data "aws_eks_cluster_auth" "eks" {
   name = data.aws_eks_cluster.this.name
 }
 
