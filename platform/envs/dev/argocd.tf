@@ -22,15 +22,13 @@ data "aws_eks_cluster_auth" "eks" {
 }
 
 # Default Helm provider (for general use)
-provider "kubernetes" {
-  alias                  = "eks"
-  host                   = data.aws_eks_cluster.eks.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
-  token                  = data.aws_eks_cluster_auth.eks.token
-}
-
 provider "helm" {
-  kubernetes = kubernetes.eks
+  alias = "argocd"
+  kubernetes {
+    host                   = data.aws_eks_cluster.eks.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.eks.token
+  }
 }
 
 resource "helm_release" "argocd" {
